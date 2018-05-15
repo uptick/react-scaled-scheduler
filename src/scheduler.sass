@@ -1,0 +1,159 @@
+$event-colour: #34495e
+$handle-size: 1rem
+
+$greater-border: 1px solid #ddd
+$lesser-border: 1px solid #ddd
+
+div.rscales-root
+  border: $greater-border
+  h2
+    font-size: 1.1rem
+    line-height: 1.5em
+
+  div.rscales-header, div.rscales-row
+    display: flex
+    flex-direction: row
+    div.rscales-title
+      flex-basis: 10rem
+      min-width: 0
+      display: flex
+      align-items: center
+      h2
+        margin-left: 1rem
+    div.rscales-data
+      flex: 1
+      display: flex
+      flex-direction: row
+  div.rscales-header div.rscales-data
+    > div
+      flex: 1
+      text-align: center
+      display: flex
+      justify-content: center
+      align-items: center
+
+  div.rscales-header
+    h3
+      font-size: 0.8rem
+      line-height: 2em
+      margin: 0
+      padding: 0
+  div.rscales-row div.rscales-data
+    position: relative
+
+  div.rscales-dropzone
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+
+  &.vertical
+    display: flex
+    flex-direction: row
+    div.rscales-header, div.rscales-row
+      flex: 1
+      flex-grow: 0
+      div.rscales-data
+        flex-direction: column
+    div.rscales-header
+      flex-basis: 5rem
+
+  &:not(.vertical)
+    div.rscales-header, div.rscales-row
+      &:not(:last-child)
+        border-bottom: $lesser-border
+      &.rscales-header
+        border-bottom: $greater-border
+      div.rscales-title
+        border-right: $greater-border
+    div.rscales-header div.rscales-data
+      > div
+        &:not(:last-child)
+          border-right: $lesser-border
+  &.vertical
+    div.rscales-header, div.rscales-row
+      &:not(:last-child)
+        border-right: $lesser-border
+      &.rscales-header
+        border-right: $greater-border
+      div.rscales-title
+        border-bottom: $greater-border
+    div.rscales-header div.rscales-data
+      > div
+        &:not(:last-child)
+          border-bottom: $lesser-border
+
+  div.rscales-event
+    position: absolute
+    background: $event-colour
+    color: #fff
+    border: 1px solid darken($event-colour, 20%)
+    display: flex
+    &:hover
+      z-index: 1
+      transition: none
+    &:not(.disabled)
+      cursor: move
+      &.clickable
+        cursor: pointer
+    &.active
+      // background: red
+      z-index: 2
+    &.hidden
+      opacity: 0
+    &.disabled
+      opacity: 0.5
+
+    div.rscales-event-body
+      flex: 1
+      min-width: 0
+      position: relative
+      display: flex
+      span.resize
+        position: absolute
+
+    div.rscales-event-contents
+      padding: 0.2rem
+      flex: 1
+      min-width: 0
+      overflow: hidden
+      font-size: 1rem
+      line-height: 1.5em
+      text-align: center
+
+  &:not(.vertical)
+    div.rscales-event:hover
+      &:not(.active)
+        max-height: none !important
+  &.vertical
+    div.rscales-event:hover
+      &:not(.active)
+        max-width: none !important
+
+  &:not(.vertical)
+    div.rscales-event
+      div.rscales-event-body
+        span.resize
+          top: 0
+          width: $handle-size
+          height: 100%
+          &.before
+            left: -$handle-size
+            cursor: e-resize
+          &.after
+            right: -$handle-size
+            cursor: w-resize
+  &.vertical
+    div.rscales-event
+      div.rscales-event-body
+        span.resize
+          left: 0
+          height: $handle-size
+          width: 100%
+          &.before
+            top: -$handle-size
+            cursor: s-resize
+          &.after
+            bottom: -$handle-size
+            cursor: n-resize
