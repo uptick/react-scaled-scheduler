@@ -1,6 +1,6 @@
 {
   "name": "react-scaled-scheduler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Scheduler with events drawn to scale along a time axis, with drag and drop support",
   "main": "index.js",
   "scripts": {
@@ -37,9 +37,14 @@
     "event-time-utils": "^1.0.1",
     "moment": "^2.22.1",
     "prop-types": "^15.6.1",
-    "react": "^16.3.2",
+    "react": "^15.4",
+    "react-dom": "^15.4",
     "react-dnd": "^2.6.0",
     "shallow-utils": "^1.0.1"
+  },
+  "peerDependencies": {
+    "react": "0.14.x || 15.x",
+    "react-dom": "0.14.x || 15.x"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
