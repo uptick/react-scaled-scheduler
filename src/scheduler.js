@@ -50,7 +50,7 @@ class Scheduler extends React.Component {
     const corners = []
     const children = []
     React.Children.map(this.props.children, (child) => {
-      if (child.type == Corner) {
+      if (child && 'type' in child && child.type == Corner) {
         corners.push(child)
         return
       }
