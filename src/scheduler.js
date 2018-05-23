@@ -69,6 +69,7 @@ class Scheduler extends React.Component {
         droptime: this.state.droptime,
 
         updateDroptime: this.updateDroptime,
+        // customDropTypes: this.props.customDropTypes,
         onEventDrop: this.props.onEventDrop,
         onEventClick: this.props.onEventClick,
       }))
@@ -104,6 +105,7 @@ Scheduler.defaultProps = {
   animTransition: 'ease-out',
   eventMargin: 5,
   eventHeight: 16 * 2 + 10,
+  // customDropTypes: [],
   onEventDrop: function(event, rowData, dropData) {
     console.log('RScaleS: dropped rscales event', event, 'at', rowData, dropData)
   },

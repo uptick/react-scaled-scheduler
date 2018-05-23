@@ -261,8 +261,13 @@ class Row extends React.Component {
     )
   }
 }
-Row = DropTarget([
-  'RSCALES_EVENT',
-], rowSource, rowCollector)(Row)
+Row = DropTarget(
+  // (props) => {
+  //   return ['RSCALES_EVENT'].concat(props.customDropTypes)
+  // },
+  ['RSCALES_EVENT', 'SCHEDULER_TASK'],
+  rowSource,
+  rowCollector
+)(Row)
 
 export default Row
