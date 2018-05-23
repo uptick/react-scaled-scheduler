@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import { DropTarget } from 'react-dnd'
-import { eventsInRange, chronoEventsComparer, stackEvents, nearestTime } from 'event-time-utils'
+import { eventsInRange, chronoEventsComparer, stackEvents, nearestTime, activeTime } from 'event-time-utils'
 
 import Event from './event.js'
 
@@ -248,6 +248,7 @@ class Row extends React.Component {
             {'title' in this.props && (
               <h2>{this.props.title}</h2>
             )}
+            {this.props.showActiveTime && (<span className="hours">{activeTime(this.props.events, intervalSetBegins, intervalSetEnds) + 'h'}</span>)}
           </div>
         )}
         <div className="rscales-data" ref="ruler">

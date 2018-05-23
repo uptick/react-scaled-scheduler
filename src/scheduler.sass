@@ -14,16 +14,27 @@ div.rscales-root
     display: flex
     flex-direction: row
     div.rscales-title
-      flex-basis: 10rem
+      flex-basis: 15rem
       min-width: 0
       display: flex
       align-items: center
-      h2
-        margin-left: 1rem
     div.rscales-data
       flex: 1
       display: flex
       flex-direction: row
+  div.rscales-row div.rscales-title
+    padding-right: 2rem
+    position: relative
+    h2
+      margin-left: 1rem
+    span.hours
+      position: absolute
+      bottom: 0
+      right: 0
+      padding: 0.5rem
+      font-size: 0.8rem
+      line-height: 1em
+      color: #666
   div.rscales-header div.rscales-data
     > div
       flex: 1
