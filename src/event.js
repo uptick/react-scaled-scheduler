@@ -155,6 +155,9 @@ class Event extends React.PureComponent {
       <div className="rscales-event-body">
         <div className="rscales-event-contents">
           <span className="title">{this.props.title}</span>
+          {this.props.location && (
+            <p className="location">{this.props.location.trim()}</p>
+          )}
         </div>
         {!this.props.disabled && beforeHandle}
         {!this.props.disabled && afterHandle}
