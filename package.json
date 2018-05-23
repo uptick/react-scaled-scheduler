@@ -1,6 +1,6 @@
 {
   "name": "react-scaled-scheduler",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Scheduler with events drawn to scale along a time axis, with drag and drop support",
   "main": "index.js",
   "scripts": {
