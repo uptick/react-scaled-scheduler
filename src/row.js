@@ -93,15 +93,22 @@ class Row extends React.Component {
 
     this.props.updateDroptime(position)
   }
-  adjustedDropItem() {
-    let dropRealTime = this.props.intervals[0].begins
+  getDropRealTime() {
+    let time = this.props.intervals[0].begins
     let inInterval = this.props.intervals[Math.floor(this.props.intervals.length * this.props.droptime)]
     if (inInterval) {
       let intervalPosition = this.props.droptime % (1 / this.props.intervals.length) * this.props.intervals.length
 
-      dropRealTime = +inInterval.begins + ((+inInterval.ends - +inInterval.begins) * intervalPosition)
-      dropRealTime = nearestTime(dropRealTime, this.props.dropRounding)
+      time = +inInterval.begins + ((+inInterval.ends - +inInterval.begins) * intervalPosition)
     }
+    return time
+  }
+  adjustedDropItem() {
+    let dropRealTime = this.getDropRealTime()
+    if ('grabOffset' in this.props.dropItem) {
+      dropRealTime -= this.props.dropItem.grabOffset
+    }
+    dropRealTime = nearestTime(dropRealTime, this.props.dropRounding)
 
     let changedEvent = {
       ...this.props.dropItem,
@@ -191,6 +198,7 @@ class Row extends React.Component {
           clickable={this.props.onEventClick !== null}
           onClick={this.handleEventClick}
           onDrop={this.props.onEventDrop}
+          dropRealTime={this.getDropRealTime()}
         />
       )
     })

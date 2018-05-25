@@ -10,6 +10,7 @@ const moveSource = {
     return {
       ...props,
       action: 'move',
+      grabOffset: props.dropRealTime - props.begins,
     }
   },
   endDrag(props, monitor) {
@@ -25,7 +26,7 @@ const moveSource = {
     }
     let intervalPosition = dropResult.droptime % (1 / dropResult.intervals.length) * dropResult.intervals.length
     let dropRealTime = +inInterval.begins + ((+inInterval.ends - +inInterval.begins) * intervalPosition)
-    dropRealTime = nearestTime(dropRealTime, props.dropRounding)
+    dropRealTime = nearestTime(dropRealTime - item.grabOffset, props.dropRounding)
     props.onDrop(item, {moveTo: dropRealTime}, dropResult.rowData)
   },
 }
