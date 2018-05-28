@@ -102,7 +102,7 @@ Scheduler.defaultProps = {
   dropRounding: moment.duration({minutes: 15}),
   headerTitleFormat: 'ha',
   minEventDuration: moment.duration({minutes: 15}),
-  dragoverDebounce: 50,
+  dragoverDebounce: 200,
   dragoverTickrate: 200,
   animTransition: 'ease-out',
   eventMargin: 5,

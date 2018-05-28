@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { DropTarget } from 'react-dnd'
 import { eventsInRange, chronoEventsComparer, stackEvents, nearestTime, activeTime } from 'event-time-utils'
+import { shallowEqual, shallowEqualExcept, shallowItemsDifferExcept } from 'shallow-utils'
 
 import Event from './event.js'
 
@@ -52,6 +53,50 @@ class Row extends React.Component {
     this.refs.ruler.removeEventListener('dragover', this.dragoverEvent);
     this.refs.ruler.removeEventListener('mousemove', this.dragoverEvent);
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    let nextActive = (nextProps.isOver && nextProps.canDrop)
+    let currentlyActive = (this.props.isOver && this.props.canDrop)
+
+    if (currentlyActive != nextActive) {
+      // console.log('dnd active state changed')
+      return true
+    }
+    else if (currentlyActive) {
+      if (this.props.droptime != nextProps.droptime) {
+        // console.log('droptime changed')
+        return true
+      }
+    }
+
+    if (!shallowEqual(this.props.events, nextProps.events)) {
+      // console.log('events changed')
+      return true
+    }
+    if (!shallowEqual(this.props.rowData, nextProps.rowData)) {
+      // console.log('rowData changed')
+      return true
+    }
+    if (!shallowEqual(this.props.intervals, nextProps.intervals)) {
+      // console.log('intervals changed')
+      return true
+    }
+
+    let ignoreProps = [
+      'droptime',
+    ]
+    let checkedProps = [
+      'events',
+      'rowData',
+      'intervals',
+    ]
+    if (!shallowEqualExcept(this.props, nextProps, checkedProps.concat(ignoreProps))) {
+      // console.log('misc props changed', shallowItemsDifferExcept(this.props, nextProps, checkedProps.concat(ignoreProps)))
+      return true
+    }
+
+    return false
+  }
+
   dragoverEvent = (event) => {
     const since = (new Date()).getTime() - this.props.lastDropCalc
     if (since < this.props.dragoverTickrate) {
@@ -93,7 +138,7 @@ class Row extends React.Component {
 
     this.props.updateDroptime(position)
   }
-  getDropRealTime() {
+  getDropRealTime = () => {
     let time = this.props.intervals[0].begins
     let inInterval = this.props.intervals[Math.floor(this.props.intervals.length * this.props.droptime)]
     if (inInterval) {
@@ -198,12 +243,13 @@ class Row extends React.Component {
           clickable={this.props.onEventClick !== null}
           onClick={this.handleEventClick}
           onDrop={this.props.onEventDrop}
-          dropRealTime={this.getDropRealTime()}
+          getDropRealTime={this.getDropRealTime}
         />
       )
     })
   }
   render() {
+    // console.log('rendering row')
     let intervalSetBegins = +this.props.intervals[0].begins
     let intervalSetEnds = +this.props.intervals[this.props.intervals.length - 1].ends
 

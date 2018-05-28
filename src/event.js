@@ -4,13 +4,14 @@ import { DragSource } from 'react-dnd'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { nearestTime } from 'event-time-utils'
+import { shallowEqual, shallowEqualExcept, shallowItemsDifferExcept } from 'shallow-utils'
 
 const moveSource = {
   beginDrag(props, monitor) {
     return {
       ...props,
       action: 'move',
-      grabOffset: props.dropRealTime - props.begins,
+      grabOffset: props.getDropRealTime() - props.begins,
     }
   },
   endDrag(props, monitor) {
@@ -20,12 +21,7 @@ const moveSource = {
       return
     }
 
-    let inInterval = dropResult.intervals[Math.floor(dropResult.intervals.length * dropResult.droptime)]
-    if (!inInterval) {
-      return
-    }
-    let intervalPosition = dropResult.droptime % (1 / dropResult.intervals.length) * dropResult.intervals.length
-    let dropRealTime = +inInterval.begins + ((+inInterval.ends - +inInterval.begins) * intervalPosition)
+    let dropRealTime = props.getDropRealTime()
     dropRealTime = nearestTime(dropRealTime - item.grabOffset, props.dropRounding)
     props.onDrop(item, {moveTo: dropRealTime}, dropResult.rowData)
   },
@@ -51,13 +47,7 @@ const beforeSource = {
       return
     }
 
-    let inInterval = dropResult.intervals[Math.floor(dropResult.intervals.length * dropResult.droptime)]
-    if (!inInterval) {
-      return
-    }
-    let intervalPosition = dropResult.droptime % (1 / dropResult.intervals.length) * dropResult.intervals.length
-    let dropRealTime = +inInterval.begins + ((+inInterval.ends - +inInterval.begins) * intervalPosition)
-    dropRealTime = nearestTime(dropRealTime, props.dropRounding)
+    let dropRealTime = props.getDropRealTime()
     let newBegins = Math.min(dropRealTime, +item.ends - props.minEventDuration)
     props.onDrop(item, {begins: newBegins}, dropResult.rowData)
   },
@@ -101,7 +91,19 @@ function afterCollect(connect, monitor) {
   }
 }
 
-class Event extends React.PureComponent {
+class Event extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    let ignoreProps = [
+      'dropRealTime',
+    ]
+    if (!shallowEqualExcept(this.props, nextProps, ignoreProps)) {
+      // console.log('misc props changed', shallowItemsDifferExcept(this.props, nextProps, ignoreProps))
+      return true
+    }
+
+    return false
+  }
+
   handleClick = (event) => {
     if (event) {
       event.preventDefault()
@@ -112,6 +114,7 @@ class Event extends React.PureComponent {
     this.props.onClick(this.props.id)
   }
   render() {
+    // console.log('rendering event')
     let tickrateSecs = `${this.props.dragoverTickrate / 1000}s`
     let style = {
       transition: `width ${tickrateSecs} ${this.props.animTransition}, left ${tickrateSecs} ${this.props.animTransition}, height ${tickrateSecs} ${this.props.animTransition}, top ${tickrateSecs} ${this.props.animTransition}`,
