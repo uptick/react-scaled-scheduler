@@ -3,6 +3,7 @@ import moment from 'moment'
 import { DropTarget } from 'react-dnd'
 import { eventsInRange, chronoEventsComparer, stackEvents, nearestTime, activeTime } from 'event-time-utils'
 import { shallowEqual, shallowEqualExcept, shallowItemsDifferExcept } from 'shallow-utils'
+import PropTypes from 'prop-types'
 
 import Event from './event.js'
 
@@ -44,14 +45,39 @@ function rowCollector(connect, monitor) {
     dropItemType: monitor.getItemType(),
   }
 }
+
+function SimpleHeading(props) {
+  return (
+    <h2>{props.title}</h2>
+  )
+}
+
 class Row extends React.Component {
+  static defaultProps = {
+    titleRenderer: SimpleHeading,
+  }
+  static propTypes = {
+    dragoverEvent: PropTypes.any,
+    droptime: PropTypes.any,
+    events: PropTypes.any,
+    rowData: PropTypes.object,
+    intervals: PropTypes.any,
+    dropItem: PropTypes.any,
+    title: PropTypes.string,
+    titleRenderer: PropTypes.func,
+    canDrop: PropTypes.bool,
+    isOver: PropTypes.bool,
+    vertical: PropTypes.any,
+    lastDropCalc: PropTypes.any,
+    dragoverTickrate: PropTypes.any,
+  }
   componentDidMount() {
-    this.refs.ruler.addEventListener('dragover', this.dragoverEvent);
-    this.refs.ruler.addEventListener('mousemove', this.dragoverEvent);
+    this.refs.ruler.addEventListener('dragover', this.dragoverEvent)
+    this.refs.ruler.addEventListener('mousemove', this.dragoverEvent)
   }
   componentWillUnmount() {
-    this.refs.ruler.removeEventListener('dragover', this.dragoverEvent);
-    this.refs.ruler.removeEventListener('mousemove', this.dragoverEvent);
+    this.refs.ruler.removeEventListener('dragover', this.dragoverEvent)
+    this.refs.ruler.removeEventListener('mousemove', this.dragoverEvent)
   }
   shouldComponentUpdate(nextProps, nextState) {
     let nextActive = (nextProps.isOver && nextProps.canDrop)
@@ -292,6 +318,12 @@ class Row extends React.Component {
     else {
       style.height = `${this.props.eventHeight + this.props.eventMargin * 2}px`
     }
+
+    let title
+    if (this.props.title && this.props.titleRenderer) {
+      title = <this.props.titleRenderer title={this.props.title} />
+    }
+
     return (
       <div
         className="rscales-row"
@@ -299,9 +331,7 @@ class Row extends React.Component {
       >
         {this.props.showTitle && (
           <div className="rscales-title">
-            {'title' in this.props && (
-              <h2>{this.props.title}</h2>
-            )}
+            {title}
             {this.props.showActiveTime && (<span className="hours">{activeTime(this.props.events, intervalSetBegins, intervalSetEnds) + 'h'}</span>)}
           </div>
         )}
