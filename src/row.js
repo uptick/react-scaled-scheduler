@@ -115,14 +115,12 @@ class Row extends React.Component {
   }
   updateDroptime(event) {
     const calendarRect = this.refs.ruler.getBoundingClientRect()
-    // const calendarWidth = calendarRect.right - calendarRect.left
-    // const calendarHeight = calendarRect.bottom - calendarRect.top
     let position = 0
     if (this.props.vertical) {
-      position = (event.pageY - calendarRect.top) / calendarRect.height
+      position = (event.clientY - calendarRect.top) / calendarRect.height
     }
     else {
-      position = (event.pageX - calendarRect.left) / calendarRect.width
+      position = (event.clientX - calendarRect.left) / calendarRect.width
     }
     if (position > 1) {
       position = 1
