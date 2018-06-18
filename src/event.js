@@ -123,9 +123,9 @@ class Event extends React.Component {
       style = {
         ...style,
         height: this.props.width,
-        // maxWidth: this.props.height,
-        // minWidth: this.props.height,
-        right: this.props.top,
+        maxWidth: this.props.height,
+        minWidth: this.props.height,
+        left: this.props.top,
         top: this.props.left,
       }
     }
