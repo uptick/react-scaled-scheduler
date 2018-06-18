@@ -143,10 +143,10 @@ class Row extends React.Component {
     const calendarRect = this.refs.ruler.getBoundingClientRect()
     let position = 0
     if (this.props.vertical) {
-      position = (event.clientY - calendarRect.top) / calendarRect.height
+      position = (event.pageY - calendarRect.top) / calendarRect.height
     }
     else {
-      position = (event.clientX - calendarRect.left) / calendarRect.width
+      position = (event.pageX - calendarRect.left) / calendarRect.width
     }
     if (position > 1) {
       position = 1
