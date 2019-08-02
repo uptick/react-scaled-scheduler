@@ -268,6 +268,7 @@ class Row extends React.Component {
           onClick={this.handleEventClick}
           onDrop={this.props.onEventDrop}
           getDropRealTime={this.getDropRealTime}
+          rowData={this.props.rowData}
         />
       )
     })

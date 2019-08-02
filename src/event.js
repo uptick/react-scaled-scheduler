@@ -23,7 +23,7 @@ const moveSource = {
 
     let dropRealTime = props.getDropRealTime()
     dropRealTime = nearestTime(dropRealTime - item.grabOffset, props.dropRounding)
-    props.onDrop(item, {moveTo: dropRealTime}, dropResult.rowData)
+    props.onDrop(item, props.rowData, {...dropResult, moveTo: dropRealTime})
   },
 }
 function moveCollect(connect, monitor) {
