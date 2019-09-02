@@ -49,7 +49,7 @@ const beforeSource = {
 
     let dropRealTime = props.getDropRealTime()
     let newBegins = Math.min(dropRealTime, +item.ends - props.minEventDuration)
-    props.onDrop(item, {begins: newBegins}, dropResult.rowData)
+    props.onDrop(item, props.rowData, {...dropResult, begins: newBegins})
   },
 }
 function beforeCollect(connect, monitor) {
@@ -81,7 +81,7 @@ const afterSource = {
     let dropRealTime = +inInterval.begins + ((+inInterval.ends - +inInterval.begins) * intervalPosition)
     dropRealTime = nearestTime(dropRealTime, props.dropRounding)
     let newEnds = Math.max(dropRealTime, +item.begins + props.minEventDuration)
-    props.onDrop(item, {ends: newEnds}, dropResult.rowData)
+    props.onDrop(item, props.rowData, {...dropResult, ends: newEnds})
   },
 }
 function afterCollect(connect, monitor) {
@@ -157,7 +157,7 @@ class Event extends React.Component {
 
     var contents = (
       <div className="rscales-event-body">
-        <div className="rscales-event-contents">
+        <div className="rscales-event-contents" style={this.props.style}>
           <span className="title">{this.props.title}</span>
           {this.props.location && (
             <p className="location">{this.props.location.trim()}</p>
