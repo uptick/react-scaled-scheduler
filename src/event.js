@@ -160,7 +160,7 @@ class Event extends React.Component {
         <div className="rscales-event-contents" style={this.props.style}>
           <span className="title">{this.props.title}</span>
           {this.props.location && (
-            <p className="location">{this.props.location.trim()}</p>
+            <p className="location">{this.props.location}</p>
           )}
         </div>
         {!this.props.disabled && beforeHandle}
