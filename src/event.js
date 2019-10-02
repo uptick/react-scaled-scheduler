@@ -48,6 +48,7 @@ const beforeSource = {
     }
 
     let dropRealTime = props.getDropRealTime()
+    dropRealTime = nearestTime(dropRealTime, props.dropRounding)
     let newBegins = Math.min(dropRealTime, +item.ends - props.minEventDuration)
     props.onDrop(item, props.rowData, {...dropResult, begins: newBegins})
   },
