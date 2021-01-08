@@ -18,7 +18,12 @@ class Header extends React.Component {
               title = this.props.titleFormat(interval)
             }
             else {
-              title = moment(interval.begins, 'x').format(this.props.titleFormat)
+              if (this.props.timezone) {
+                title = moment(interval.begins, 'x').tz(this.props.timezone).format(this.props.titleFormat)
+              }
+              else {
+                title = moment(interval.begins, 'x').format(this.props.titleFormat)
+              }
             }
             return (
               <div key={`interval-${interval.begins}`}>
@@ -66,6 +71,7 @@ class Scheduler extends React.Component {
         animTransition: this.props.animTransition,
         eventMargin: this.props.eventMargin,
         eventHeight: this.props.eventHeight,
+        timezone: this.props.timezone,
 
         droptime: this.state.droptime,
 
@@ -84,6 +90,7 @@ class Scheduler extends React.Component {
           showTitle={this.props.showTitles}
           intervals={this.props.intervals}
           titleFormat={this.props.headerTitleFormat}
+          timezone={this.props.timezone}
         >
           {corners}
         </Header>
@@ -107,6 +114,7 @@ Scheduler.defaultProps = {
   animTransition: 'ease-out',
   eventMargin: 5,
   eventHeight: 16 * 2 + 10,
+  timezone: null,
   // customDropTypes: [],
   onEventDrop: function(event, rowData, dropData) {
     console.log('RScaleS: dropped rscales event', event, 'at', rowData, dropData)
