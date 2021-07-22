@@ -53,9 +53,15 @@ function SimpleHeading(props) {
 }
 
 class Row extends React.Component {
+  constructor() {
+    super();
+    this.rulerRef = React.createRef();
+  }
+
   static defaultProps = {
     titleRenderer: SimpleHeading,
   }
+
   static propTypes = {
     dragoverEvent: PropTypes.any,
     droptime: PropTypes.any,
@@ -71,14 +77,17 @@ class Row extends React.Component {
     lastDropCalc: PropTypes.any,
     dragoverTickrate: PropTypes.any,
   }
+  
   componentDidMount() {
-    this.refs.ruler.addEventListener('dragover', this.dragoverEvent)
-    this.refs.ruler.addEventListener('mousemove', this.dragoverEvent)
+    this.rulerRef.current.addEventListener('dragover', this.dragoverEvent)
+    this.rulerRef.current.addEventListener('mousemove', this.dragoverEvent)
   }
+
   componentWillUnmount() {
-    this.refs.ruler.removeEventListener('dragover', this.dragoverEvent)
-    this.refs.ruler.removeEventListener('mousemove', this.dragoverEvent)
+    this.rulerRef.current.removeEventListener('dragover', this.dragoverEvent)
+    this.rulerRef.current.removeEventListener('mousemove', this.dragoverEvent)
   }
+  
   shouldComponentUpdate(nextProps, nextState) {
     let nextActive = (nextProps.isOver && nextProps.canDrop)
     let currentlyActive = (this.props.isOver && this.props.canDrop)
@@ -140,7 +149,7 @@ class Row extends React.Component {
     this.updateDroptime(event)
   }
   updateDroptime(event) {
-    const calendarRect = this.refs.ruler.getBoundingClientRect()
+    const calendarRect = this.rulerRef.current.getBoundingClientRect()
     let position = 0
     if (this.props.vertical) {
       position = (event.clientY - calendarRect.top) / calendarRect.height
@@ -334,7 +343,7 @@ class Row extends React.Component {
             {this.props.showActiveTime && (<span className="hours">{activeTime(this.props.events, intervalSetBegins, intervalSetEnds) + 'h'}</span>)}
           </div>
         )}
-        <div className="rscales-data" ref="ruler">
+        <div className="rscales-data" ref={this.rulerRef}>
           {this.props.connectDropTarget(
             <div className="rscales-dropzone">
               {this.renderEvents(stackedEvents, this.props.intervals)}
